@@ -1,0 +1,15 @@
+public class Item {
+  String name;
+  float supplierPrice;
+  int quantity;
+  String supplierName;
+
+  // Getters and Setters (omitted for brevity)
+
+  public Item(String name, float supplierPrice, int quantity, String supplierName) {
+    this.name = name;
+    this.supplierPrice = supplierPrice;
+    this.quantity = quantity;
+    this.supplierName = supplierName;
+  }
+}
