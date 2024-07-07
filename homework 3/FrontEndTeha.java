@@ -73,7 +73,7 @@ public class FrontEndTeha extends Application
 
         // JavaFX must have a Scene (window content) inside a Stage (window)
         Scene scene = new Scene(pane, 300,100);
-        stage.setTitle("JavaFX Example");
+        stage.setTitle("Fatihah");
         stage.setScene(scene);
 
         // Show the Stage (window)
