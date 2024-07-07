@@ -30,9 +30,7 @@ public class FrontEndInsyi extends Application {
     }
 
     @Override
-    public void start(Stage primaryStage) {
-        primaryStage.setTitle("Clients Management");
-
+    public void start(Stage stage) {
         GridPane grid = new GridPane();
         grid.setPadding(new Insets(10, 10, 10, 10));
         grid.setVgap(8);
@@ -79,10 +77,11 @@ public class FrontEndInsyi extends Application {
         addButton.setOnAction(e -> addClient());
         removeButton.setOnAction(e -> removeClient());
         printButton.setOnAction(e -> printClientsDetails());
-
+        
+        stage.setTitle("Insyirah");
         Scene scene = new Scene(grid, 400, 450);
-        primaryStage.setScene(scene);
-        primaryStage.show();
+        stage.setScene(scene);
+        stage.show();
     }
 
     private void addClient() {
