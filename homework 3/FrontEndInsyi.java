@@ -7,13 +7,6 @@ import javafx.stage.Stage;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Write a description of JavaFX class FrontEnd here.
- *
- * @author (your name)
- * @version (a version number or a date)
- */
-
 public class FrontEndInsyi extends Application {
 
     private TextField firstNameField = new TextField();
@@ -74,11 +67,11 @@ public class FrontEndInsyi extends Application {
                 phoneLabel, phoneField, addressLabel, addressField, orderLabel, orderField,
                 addButton, removeButton, printButton, outputArea);
 
-        addButton.setOnAction(e -> addClient());
-        removeButton.setOnAction(e -> removeClient());
-        printButton.setOnAction(e -> printClientsDetails());
-        
-        stage.setTitle("Insyirah");
+        addButton.setOnAction(event -> addClient());
+        removeButton.setOnAction(event -> removeClient());
+        printButton.setOnAction(event -> printClientsDetails());
+
+        stage.setTitle("Insyi");
         Scene scene = new Scene(grid, 400, 450);
         stage.setScene(scene);
         stage.show();
