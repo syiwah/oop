@@ -7,6 +7,12 @@ import javafx.stage.Stage;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Write a description of JavaFX class FrontEndInsyi here.
+ *
+ * @author (your name)
+ * @version (a version number or a date)
+ */
 public class FrontEndInsyi extends Application {
 
     private TextField fnametf = new TextField();
@@ -128,14 +134,13 @@ class Clients {
         clientsList.removeIf(client -> client.getFullName().equals(fullName));
     }
 
-    public String getClientsDetails() { 
-        String details = "";
+    public String getClientsDetails() {
+        StringBuilder details = new StringBuilder();
         for (Client client : clientsList) {
-            details += client + "\n";
+            details.append(client).append("\n");
         }
-        return details;
+        return details.toString();
     }
-    
 
     static class Client {
         private String fullName;
@@ -154,6 +159,15 @@ class Clients {
             return fullName;
         }
 
+        @Override
+        public String toString() {
+            return "Client{" +
+                    "fullName='" + fullName + '\'' +
+                    ", phoneNumber='" + phoneNumber + '\'' +
+                    ", address=" + address +
+                    ", orders=" + orders +
+                    '}';
+        }
     }
 
     static class Address {
