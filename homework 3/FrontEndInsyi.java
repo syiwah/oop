@@ -9,12 +9,12 @@ import java.util.List;
 
 public class FrontEndInsyi extends Application {
 
-    private TextField firstNameField = new TextField();
-    private TextField lastNameField = new TextField();
-    private TextField phoneField = new TextField();
-    private TextField addressField = new TextField();
-    private TextField orderField = new TextField();
-    private TextArea outputArea = new TextArea();
+    private TextField fnametf = new TextField();
+    private TextField lnametf = new TextField();
+    private TextField phonetf = new TextField();
+    private TextField addresstf = new TextField();
+    private TextField ordertf = new TextField();
+    private TextArea outputtf = new TextArea();
 
     private Clients clients = new Clients();
 
@@ -30,46 +30,42 @@ public class FrontEndInsyi extends Application {
         grid.setHgap(10);
 
         // Create UI components
-        Label firstNameLabel = new Label("First Name:");
-        GridPane.setConstraints(firstNameLabel, 0, 0);
-        GridPane.setConstraints(firstNameField, 1, 0);
+        Label fnamelbl = new Label("First Name:");
+        grid.add(fnamelbl, 0, 0);
+        grid.add(fnametf, 1, 0);
 
-        Label lastNameLabel = new Label("Last Name:");
-        GridPane.setConstraints(lastNameLabel, 0, 1);
-        GridPane.setConstraints(lastNameField, 1, 1);
+        Label lnamelbl = new Label("Last Name:");
+        grid.add(lnamelbl, 0, 1);
+        grid.add(lnametf, 1, 1);
 
-        Label phoneLabel = new Label("Phone Number:");
-        GridPane.setConstraints(phoneLabel, 0, 2);
-        GridPane.setConstraints(phoneField, 1, 2);
+        Label phonelbl = new Label("Phone Number:");
+        grid.add(phonelbl, 0, 2);
+        grid.add(phonetf, 1, 2);
 
-        Label addressLabel = new Label("Address:");
-        GridPane.setConstraints(addressLabel, 0, 3);
-        GridPane.setConstraints(addressField, 1, 3);
+        Label addresslbl = new Label("Address:");
+        grid.add(addresslbl, 0, 3);
+        grid.add(addresstf, 1, 3);
 
-        Label orderLabel = new Label("Order Item:");
-        GridPane.setConstraints(orderLabel, 0, 4);
-        GridPane.setConstraints(orderField, 1, 4);
+        Label orderlbl = new Label("Order Item:");
+        grid.add(orderlbl, 0, 4);
+        grid.add(ordertf, 1, 4);
 
         Button addButton = new Button("Add Client");
-        GridPane.setConstraints(addButton, 0, 5);
+        grid.add(addButton, 0, 5);
 
         Button removeButton = new Button("Remove Client");
-        GridPane.setConstraints(removeButton, 1, 5);
+        grid.add(removeButton, 1, 5);
 
         Button printButton = new Button("Print Clients Details");
-        GridPane.setConstraints(printButton, 0, 6);
+        grid.add(printButton, 0, 6);
 
-        GridPane.setConstraints(outputArea, 0, 7, 2, 1);
-        outputArea.setPrefHeight(200);
+        grid.add(outputtf, 0, 7, 2, 1);
+        outputtf.setPrefHeight(200);
 
-        // Add components to the grid
-        grid.getChildren().addAll(firstNameLabel, firstNameField, lastNameLabel, lastNameField,
-                phoneLabel, phoneField, addressLabel, addressField, orderLabel, orderField,
-                addButton, removeButton, printButton, outputArea);
-
-        addButton.setOnAction(event -> addClient());
-        removeButton.setOnAction(event -> removeClient());
-        printButton.setOnAction(event -> printClientsDetails());
+        // Set event handlers
+        addButton.setOnAction(this::handleAddClient);
+        removeButton.setOnAction(this::handleRemoveClient);
+        printButton.setOnAction(this::handlePrintClientsDetails);
 
         stage.setTitle("Insyi");
         Scene scene = new Scene(grid, 400, 450);
@@ -77,34 +73,112 @@ public class FrontEndInsyi extends Application {
         stage.show();
     }
 
+    private void handleAddClient(javafx.event.ActionEvent event) {
+        addClient();
+    }
+
+    private void handleRemoveClient(javafx.event.ActionEvent event) {
+        removeClient();
+    }
+
+    private void handlePrintClientsDetails(javafx.event.ActionEvent event) {
+        printClientsDetails();
+    }
+
     private void addClient() {
-        String firstName = firstNameField.getText();
-        String lastName = lastNameField.getText();
-        String phoneNumber = phoneField.getText();
-        Clients.Address address = new Clients.Address(addressField.getText());
+        String fName = fnametf.getText();
+        String lName = lnametf.getText();
+        String phoneNumber = phonetf.getText();
+        Clients.Address address = new Clients.Address(addresstf.getText());
         List<Clients.Order> orders = new ArrayList<>();
 
-        Clients.Client client = new Clients.Client(firstName + " " + lastName, phoneNumber, orders, address);
+        Clients.Client client = new Clients.Client(fName + " " + lName, phoneNumber, orders, address);
         clients.addClient(client);
         clearFields();
     }
 
     private void removeClient() {
-        String firstName = firstNameField.getText();
-        String lastName = lastNameField.getText();
-        clients.removeClient(firstName + " " + lastName);
+        String fName = fnametf.getText();
+        String lName = lnametf.getText();
+        clients.removeClient(fName + " " + lName);
         clearFields();
     }
 
     private void printClientsDetails() {
-        outputArea.setText(clients.getClientsDetails());
+        outputtf.setText(clients.getClientsDetails());
     }
 
     private void clearFields() {
-        firstNameField.clear();
-        lastNameField.clear();
-        phoneField.clear();
-        addressField.clear();
-        orderField.clear();
+        fnametf.clear();
+        lnametf.clear();
+        phonetf.clear();
+        addresstf.clear();
+        ordertf.clear();
+    }
+}
+
+class Clients {
+    private List<Client> clientsList = new ArrayList<>();
+
+    public void addClient(Client client) {
+        clientsList.add(client);
+    }
+
+    public void removeClient(String fullName) {
+        clientsList.removeIf(client -> client.getFullName().equals(fullName));
+    }
+
+    public String getClientsDetails() { 
+        String details = "";
+        for (Client client : clientsList) {
+            details += client + "\n";
+        }
+        return details;
+    }
+    
+
+    static class Client {
+        private String fullName;
+        private String phoneNumber;
+        private List<Order> orders;
+        private Address address;
+
+        public Client(String fullName, String phoneNumber, List<Order> orders, Address address) {
+            this.fullName = fullName;
+            this.phoneNumber = phoneNumber;
+            this.orders = orders;
+            this.address = address;
+        }
+
+        public String getFullName() {
+            return fullName;
+        }
+
+    }
+
+    static class Address {
+        private String address;
+
+        public Address(String address) {
+            this.address = address;
+        }
+
+        @Override
+        public String toString() {
+            return address;
+        }
+    }
+
+    static class Order {
+        private String orderItem;
+
+        public Order(String orderItem) {
+            this.orderItem = orderItem;
+        }
+
+        @Override
+        public String toString() {
+            return orderItem;
+        }
     }
 }
