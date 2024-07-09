@@ -104,9 +104,9 @@ public class FrontEndInsyi extends Application {
     }
 
     private void removeClient() {
-        String fName = fnametf.getText();
-        String lName = lnametf.getText();
-        clients.removeClient(fName + " " + lName);
+        String fname = fnametf.getText();
+        String lname = lnametf.getText();
+        clients.removeClient(fname + " " + lname);
         clearFields();
     }
 
