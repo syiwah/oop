@@ -6,6 +6,7 @@ import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 import java.util.ArrayList;
 import java.util.List;
+import javafx.event.ActionEvent;
 
 /**
  * Write a description of JavaFX class FrontEndInsyi here.
@@ -22,7 +23,7 @@ public class FrontEndInsyi extends Application {
     private TextField ordertf = new TextField();
     private TextArea outputtf = new TextArea();
 
-    private Clients clients = new Clients();
+    Clients clients = new Clients();
 
     public static void main(String[] args) {
         launch(args);
@@ -69,9 +70,9 @@ public class FrontEndInsyi extends Application {
         outputtf.setPrefHeight(200);
 
         // Set event handlers
-        addButton.setOnAction(this::handleAddClient);
-        removeButton.setOnAction(this::handleRemoveClient);
-        printButton.setOnAction(this::handlePrintClientsDetails);
+        addButton.setOnAction(this::addClick);
+        removeButton.setOnAction(this::removeClick);
+        printButton.setOnAction(this::printClick);
 
         stage.setTitle("Insyi");
         Scene scene = new Scene(grid, 400, 450);
@@ -79,15 +80,15 @@ public class FrontEndInsyi extends Application {
         stage.show();
     }
 
-    private void handleAddClient(javafx.event.ActionEvent event) {
+    private void addClick(ActionEvent event) {
         addClient();
     }
 
-    private void handleRemoveClient(javafx.event.ActionEvent event) {
+    private void removeClick(ActionEvent event) {
         removeClient();
     }
 
-    private void handlePrintClientsDetails(javafx.event.ActionEvent event) {
+    private void printClick(ActionEvent event) {
         printClientsDetails();
     }
 
