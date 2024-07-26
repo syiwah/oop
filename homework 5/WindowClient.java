@@ -1,4 +1,4 @@
-// INSYIRAH BINTI HAMZAH 
+// INSYIRAH BINTI HAMZAH
 // 24000157
 import javafx.application.Application;
 import javafx.geometry.Insets;
@@ -48,6 +48,9 @@ public class WindowClient extends Application {
                 stateField.getText(),
                 zipcodeField.getText()
         ));
+        
+        Button removeButton = new Button("Remove Client");
+        removeButton.setOnAction(event -> handleRemoveClient(nameField.getText()));
 
         // Create layout
         GridPane gridPane = new GridPane();
@@ -74,16 +77,16 @@ public class WindowClient extends Application {
         gridPane.add(zipcodeField, 1, 5);
 
         gridPane.add(addButton, 1, 6);
+        gridPane.add(removeButton, 1, 7);
 
         // Set up the scene and stage
-        Scene scene = new Scene(gridPane, 400, 300);
+        Scene scene = new Scene(gridPane, 400, 350);
         stage.setTitle("Client Window");
         stage.setScene(scene);
         stage.show();
     }
 
     private void handleAddClient(String name, String phone, String street, String city, String state, String zipcode) {
-        // You should have a table for storing addresses and then reference it in the clients table
         String insertAddressSQL = "INSERT INTO addresses (street, city, state, zipcode) VALUES (?, ?, ?, ?)";
         String insertClientSQL = "INSERT INTO clients (name, phone_number, address_id) VALUES (?, ?, ?)";
 
@@ -124,6 +127,49 @@ public class WindowClient extends Application {
         } catch (SQLException e) {
             e.printStackTrace();
             showAlert(Alert.AlertType.ERROR, "Database Error", "Error adding client to database: " + e.getMessage());
+        }
+    }
+
+    private void handleRemoveClient(String name) {
+        String selectClientSQL = "SELECT id, address_id FROM clients WHERE name = ?";
+        String deleteClientSQL = "DELETE FROM clients WHERE id = ?";
+        String deleteAddressSQL = "DELETE FROM addresses WHERE id = ?";
+
+        try (Connection connection = DriverManager.getConnection(URL, USERNAME, PASSWORD)) {
+            connection.setAutoCommit(false); // Start transaction
+
+            try (PreparedStatement pstmtSelect = connection.prepareStatement(selectClientSQL)) {
+                pstmtSelect.setString(1, name);
+                ResultSet resultSet = pstmtSelect.executeQuery();
+
+                if (resultSet.next()) {
+                    int clientId = resultSet.getInt("id");
+                    int addressId = resultSet.getInt("address_id");
+
+                    // Delete client
+                    try (PreparedStatement pstmtDeleteClient = connection.prepareStatement(deleteClientSQL)) {
+                        pstmtDeleteClient.setInt(1, clientId);
+                        pstmtDeleteClient.executeUpdate();
+                    }
+
+                    // Delete address
+                    try (PreparedStatement pstmtDeleteAddress = connection.prepareStatement(deleteAddressSQL)) {
+                        pstmtDeleteAddress.setInt(1, addressId);
+                        pstmtDeleteAddress.executeUpdate();
+                    }
+
+                    connection.commit(); // Commit transaction
+                    showAlert(Alert.AlertType.INFORMATION, "Success", "Client removed successfully!");
+                } else {
+                    showAlert(Alert.AlertType.ERROR, "Error", "Client not found.");
+                }
+            } catch (SQLException e) {
+                connection.rollback(); // Rollback transaction on error
+                throw e;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            showAlert(Alert.AlertType.ERROR, "Database Error", "Error removing client from database: " + e.getMessage());
         }
     }
 
